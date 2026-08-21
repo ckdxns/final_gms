@@ -208,6 +208,29 @@ class GMSTestCase(unittest.TestCase):
         self.assertEqual(comp.agreement_end_date, "2027-04-30", "가장 나중의 마감일(2027-04-30)이 적용되어야 합니다.")
         self.assertEqual(comp.deadline_date, "2027-05-14", "데드라인은 최종 마감일 + 14일(2027-05-14)이어야 합니다.")
 
+    def test_07_korean_english_branch_alias_mapping(self):
+        """7. 지소명 한/영 통합 매핑 테이블 검증 ('상하이'='Shanghai', '도쿄'='Tokyo')"""
+        csv_alias = (
+            "GBC,기업명,사업자번호,협약기간\n"
+            "상하이,상하이기업,100-01-00001,2025.01.01 ~ 2026.12.31\n"
+            "Shanghai,상하이기업2,100-01-00002,2025.01.01 ~ 2026.12.31\n"
+            "도쿄,도쿄기업,200-02-00001,2025.01.01 ~ 2026.12.31\n"
+            "Tokyo,도쿄기업2,200-02-00002,2025.01.01 ~ 2026.12.31\n"
+        ).encode("utf-8")
+
+        res = process_file_upload(csv_alias, "agreement.csv", self.db, file_type="agreement")
+        self.assertTrue(res["success"])
+
+        # Check all mapped to Shanghai or Tokyo branches
+        shanghai_branch = self.db.query(Branch).filter(Branch.branch_name == "Shanghai").first()
+        tokyo_branch = self.db.query(Branch).filter(Branch.branch_name == "Tokyo").first()
+
+        shanghai_comps = self.db.query(Company).filter(Company.branch_id == shanghai_branch.id).all()
+        tokyo_comps = self.db.query(Company).filter(Company.branch_id == tokyo_branch.id).all()
+
+        self.assertEqual(len(shanghai_comps), 2, "'상하이'와 'Shanghai'로 입력된 데이터는 동일한 Shanghai 지소로 통합 매핑되어야 합니다.")
+        self.assertEqual(len(tokyo_comps), 2, "'도쿄'와 'Tokyo'로 입력된 데이터는 동일한 Tokyo 지소로 통합 매핑되어야 합니다.")
+
 
 if __name__ == "__main__":
     unittest.main()

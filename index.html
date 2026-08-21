@@ -808,7 +808,7 @@
 
     function getStoredProjects() {
       const stored = localStorage.getItem('gms_projects');
-      if (stored) {
+      if (stored !== null) {
         try { return JSON.parse(stored); } catch (e) {}
       }
       localStorage.setItem('gms_projects', JSON.stringify(DEFAULT_DEMO_PROJECTS));
@@ -1064,10 +1064,64 @@
         }
       }
 
-      localStorage.removeItem('gms_projects');
+      localStorage.setItem('gms_projects', '[]');
       alert("모든 등록 데이터가 성공적으로 초기화(Reset)되었습니다.");
       closeModal('resetConfirmModal');
       await initDashboard();
+    }
+
+    async function deleteProject(id) {
+      if (!confirm("해당 기업 및 매핑된 모든 리포트를 삭제하시겠습니까?")) return;
+      if (!isStaticMode) {
+        try {
+          await axios.delete(`/api/projects/${id}`);
+          await initDashboard();
+          return;
+        } catch (e) {
+          isStaticMode = true;
+        }
+      }
+      let projects = getStoredProjects();
+      projects = projects.filter(p => p.id !== id);
+      localStorage.setItem('gms_projects', JSON.stringify(projects));
+      alert("기업 데이터가 삭제되었습니다.");
+      await initDashboard();
+    }
+
+    async function deleteSingleReport(reportId, companyId) {
+      if (!confirm("해당 리포트를 삭제하시겠습니까?")) return;
+      if (!isStaticMode) {
+        try {
+          await axios.delete(`/api/reports/${reportId}`);
+          await openCompanyDetailModal(companyId);
+          await initDashboard();
+          return;
+        } catch (e) {
+          isStaticMode = true;
+        }
+      }
+      let projects = getStoredProjects();
+      const found = projects.find(p => p.id === companyId);
+      if (found && found.reports) {
+        found.reports = found.reports.filter(r => r.id !== reportId);
+        localStorage.setItem('gms_projects', JSON.stringify(projects));
+      }
+      alert("리포트가 삭제되었습니다.");
+      await openCompanyDetailModal(companyId);
+      await initDashboard();
+    }
+
+    function editProject(id) {
+      const projects = getStoredProjects();
+      const found = projects.find(p => p.id === id);
+      if (!found) return;
+      document.getElementById('editProjectId').value = found.id;
+      document.getElementById('manualModalTitle').innerText = "기업 정보 수정";
+      document.getElementById('formBranchName').value = found.branch_name;
+      document.getElementById('formCompanyName').value = found.company_name;
+      document.getElementById('formAgreementEndDate').value = found.agreement_end_date;
+      document.getElementById('formStatus').value = found.status || '진행중';
+      openModal('manualModal');
     }
 
     function openManualModal() {

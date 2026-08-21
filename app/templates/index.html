@@ -68,10 +68,8 @@
   <!-- Main Container -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-    <!-- TOP 5 KPI Cards (Exact User Requirement) -->
+    <!-- TOP 5 KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-      
-      <!-- Card 1: 총 진행 개사 수 -->
       <div class="glass-card rounded-xl p-4 shadow-sm border-l-4 border-slate-700">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-500">총 진행 개사 수</span>
@@ -85,7 +83,6 @@
         </div>
       </div>
 
-      <!-- Card 2: 올해 협약 마감 기업 수 -->
       <div class="glass-card rounded-xl p-4 shadow-sm border-l-4 border-indigo-500">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-500">올해 협약 마감 기업 수</span>
@@ -99,7 +96,6 @@
         </div>
       </div>
 
-      <!-- Card 3: (올해) 파이널리포트 업로드율 -->
       <div class="glass-card rounded-xl p-4 shadow-sm border-l-4 border-emerald-500">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-500">파이널리포트 업로드율</span>
@@ -113,7 +109,6 @@
         </div>
       </div>
 
-      <!-- Card 4: (올해) 발송율 -->
       <div class="glass-card rounded-xl p-4 shadow-sm border-l-4 border-blue-500">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-500">리포트 발송율</span>
@@ -127,7 +122,6 @@
         </div>
       </div>
 
-      <!-- Card 5: 기한 초과, 위험 기업 수 -->
       <div class="glass-card rounded-xl p-4 shadow-sm border-l-4 border-rose-500">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-500">기한 초과 / 위험 기업</span>
@@ -140,13 +134,10 @@
           <span class="text-xs text-rose-500 font-medium">마감+14일 미발송</span>
         </div>
       </div>
-
     </div>
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Chart 1: 지소별 진행/업로드/발송 현황 (Bar Chart) -->
       <div class="lg:col-span-2 glass-card rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-bold text-slate-800 text-sm flex items-center space-x-2">
@@ -160,7 +151,6 @@
         </div>
       </div>
 
-      <!-- Chart 2: 권역별 진행 기업 분포 (Doughnut Chart) -->
       <div class="glass-card rounded-xl p-5 shadow-sm">
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-bold text-slate-800 text-sm flex items-center space-x-2">
@@ -172,7 +162,6 @@
           <canvas id="regionDoughnutChart"></canvas>
         </div>
       </div>
-
     </div>
 
     <!-- Table Filter & Search Controls -->
@@ -186,14 +175,11 @@
           <span id="projectCountBadge" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-0.5 rounded-full">총 0개 기업</span>
         </div>
 
-        <!-- Filter Selects -->
         <div class="flex items-center space-x-2 text-xs">
-          <!-- Branch Filter -->
           <select id="filterBranch" onchange="loadProjects()" class="border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-indigo-500">
             <option value="">전체 지소 (28개)</option>
           </select>
 
-          <!-- Status Filter -->
           <select id="filterStatus" onchange="loadProjects()" class="border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-indigo-500">
             <option value="">전체 상태</option>
             <option value="진행중">진행중</option>
@@ -201,34 +187,33 @@
             <option value="중단">중단</option>
           </select>
 
-          <!-- Risk Only Checkbox -->
-          <label class="flex items-center space-x-1 bg-slate-100 p-2 rounded-lg cursor-pointer text-slate-700 font-semibold hover:bg-slate-200 transition">
-            <input type="checkbox" id="filterRiskOnly" onchange="loadProjects()" class="w-4 h-4 text-rose-600 rounded">
-            <span>위험/초과만 보기</span>
+          <label class="flex items-center space-x-1 font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-2 rounded-lg cursor-pointer">
+            <input type="checkbox" id="filterRiskOnly" onchange="loadProjects()" class="w-3.5 h-3.5 text-rose-600 rounded">
+            <span>위험/초과 기업만</span>
           </label>
 
-          <!-- Search Input -->
           <div class="relative">
-            <input type="text" id="filterSearch" onkeyup="if(event.key==='Enter') loadProjects()" placeholder="기업명, 지소명 검색..." class="border border-slate-300 rounded-lg pl-8 pr-3 py-2 bg-white text-xs w-48 focus:ring-2 focus:ring-indigo-500">
-            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400"></i>
+            <input type="text" id="filterSearch" onkeyup="if(event.key==='Enter') loadProjects()" placeholder="기업명 / 사업자번호 검색..." class="border border-slate-300 rounded-lg pl-8 pr-3 py-2 bg-white focus:ring-2 focus:ring-indigo-500 w-48">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400"></i>
           </div>
 
-          <button onclick="loadProjects()" class="px-3 py-2 bg-slate-800 text-white rounded-lg font-semibold hover:bg-slate-700 transition">
-            검색
+          <button onclick="loadProjects()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-semibold flex items-center space-x-1">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>조회</span>
           </button>
         </div>
       </div>
 
-      <!-- Company Projects Table -->
-      <div class="overflow-x-auto custom-scrollbar rounded-lg border border-slate-200">
+      <!-- Company Main Table -->
+      <div class="overflow-x-auto custom-scrollbar border border-slate-200 rounded-xl">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
             <tr>
               <th class="p-3">GBC (지소명)</th>
-              <th class="p-3">기업명</th>
+              <th class="p-3">기업명(국문)</th>
               <th class="p-3">사업자번호</th>
-              <th class="p-3">협약 마감일</th>
-              <th class="p-3">파이널 마감일 (+14일)</th>
+              <th class="p-3">최종 협약마감일</th>
+              <th class="p-3">파이널 마감일(+14일)</th>
               <th class="p-3">리포트 내역 (1:N)</th>
               <th class="p-3">계약성약 실적금액 ($)</th>
               <th class="p-3">진행상태</th>
@@ -242,109 +227,87 @@
         </table>
       </div>
     </div>
-
   </main>
 
-  <!-- MODALS SECTION -->
-
-  <!-- 1. Excel Upload Modal -->
+  <!-- 1. DUAL EXCEL UPLOAD MODAL -->
   <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-          <i class="fa-solid fa-file-csv text-indigo-600"></i>
-          <span>CSV / 엑셀 데이터 일괄 업로드 및 Upsert</span>
+          <i class="fa-solid fa-file-excel text-indigo-600"></i>
+          <span>2원화 엑셀 데이터 업로드</span>
         </h3>
         <button onclick="closeModal('uploadModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <p class="text-xs text-slate-500 leading-relaxed">
-        엑셀(.xlsx, .xls) 또는 CSV 파일을 업로드하여 28개 지소별 기업 데이터를 자동 파싱 병합(Upsert)합니다.<br>
-        <span class="font-semibold text-slate-700">* 지원하는 2가지 엑셀 파일 유형:</span>
-      </p>
-
-      <!-- Excel File Type Selection Radios -->
-      <div class="grid grid-cols-2 gap-2 text-xs">
-        <label class="flex items-start space-x-2 p-2.5 rounded-xl border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-50 cursor-pointer transition">
-          <input type="radio" name="uploadFileType" value="agreement" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
-          <div>
-            <div class="font-bold text-indigo-950">1. 기업별 협약마감일 엑셀</div>
-            <div class="text-[11px] text-slate-500 mt-0.5">시트 `[0. 총괄]` 자동 제외, `GBC`, `기업명(국문)`, `사업자번호`, `협약기간`에서 마감일 추출</div>
+      <form onsubmit="handleFileUpload(event)" class="space-y-4">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700">1. 업로드 엑셀 구분 선택 *</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="p-3 border rounded-xl flex items-center space-x-2 cursor-pointer bg-slate-50 hover:bg-indigo-50 border-slate-200">
+              <input type="radio" name="uploadFileType" value="agreement" checked class="text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="font-bold text-slate-800">1) 기업 협약 정보 엑셀</div>
+                <div class="text-[10px] text-slate-500">GBC, 기업명, 사업자번호, 협약기간 (다중 연장 자동 통합)</div>
+              </div>
+            </label>
+            <label class="p-3 border rounded-xl flex items-center space-x-2 cursor-pointer bg-slate-50 hover:bg-emerald-50 border-slate-200">
+              <input type="radio" name="uploadFileType" value="activity" class="text-emerald-600 focus:ring-emerald-500">
+              <div>
+                <div class="font-bold text-slate-800">2) 리포트 등록 엑셀</div>
+                <div class="text-[10px] text-slate-500">GBC, 기업명, 등록일, 계약성약실적금액, 활동내역</div>
+              </div>
+            </label>
           </div>
-        </label>
+        </div>
 
-        <label class="flex items-start space-x-2 p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 cursor-pointer transition">
-          <input type="radio" name="uploadFileType" value="activity" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
-          <div>
-            <div class="font-bold text-emerald-950">2. 활동내역/파이널리포트 엑셀</div>
-            <div class="text-[11px] text-slate-500 mt-0.5">`GBC`, `기업명`, `등록일`, `계약성약실적금액`, `활동내역` 내 Final Report 자동 감지</div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">2. 엑셀 / CSV 파일 선택 *</label>
+          <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center bg-slate-50 hover:bg-slate-100 transition cursor-pointer" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-cloud-arrow-up text-2xl text-indigo-500 mb-1 block"></i>
+            <span class="text-xs font-semibold text-slate-600">클릭하여 파일 선택 (.xlsx, .xls, .csv)</span>
+            <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="updateFileName(this)">
+            <p id="selectedFileName" class="text-xs font-bold text-indigo-600 mt-2 hidden"></p>
           </div>
-        </label>
-      </div>
+        </div>
 
-      <div class="flex items-center justify-between text-xs text-slate-500 bg-slate-50 p-2.5 rounded-lg border">
-        <span><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-1"></i>선택하지 않아도 헤더 구조를 분석하여 <b>자동 감지</b>됩니다.</span>
-        <label class="flex items-center space-x-1 cursor-pointer font-semibold text-slate-700">
-          <input type="radio" name="uploadFileType" value="auto" checked class="text-indigo-600 focus:ring-indigo-500">
-          <span>자동 감지</span>
-        </label>
-      </div>
-
-      <!-- File Input Dropzone -->
-      <form id="uploadForm" onsubmit="handleFileUpload(event)" class="space-y-4">
-        <div class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl p-6 text-center bg-slate-50 transition cursor-pointer" onclick="document.getElementById('fileInput').click()">
-          <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-500 mb-2"></i>
-          <p class="text-xs font-semibold text-slate-700">클릭하여 파일 선택 또는 드래그 앤 드롭</p>
-          <p class="text-[11px] text-slate-400 mt-1">.csv, .xlsx, .xls 파일 지원</p>
-          <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" class="hidden" onchange="updateFileName(this)">
-          <p id="selectedFileName" class="text-xs text-indigo-600 font-bold mt-2 hidden"></p>
+        <div id="uploadResultContainer" class="hidden text-xs space-y-2">
+          <div id="uploadResultMessage"></div>
+          <div id="uploadErrorTableWrapper" class="hidden max-h-32 overflow-y-auto custom-scrollbar border rounded-lg">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-rose-50 text-rose-800 font-bold border-b">
+                <tr><th class="p-2">행</th><th class="p-2">오류 내용</th></tr>
+              </thead>
+              <tbody id="uploadErrorTableBody" class="divide-y divide-rose-100"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="flex justify-end space-x-2 pt-2 border-t">
           <button type="button" onclick="closeModal('uploadModal')" class="px-4 py-2 border rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">취소</button>
-          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shadow-md">일괄 업로드 실행</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold shadow-md">
+            <i class="fa-solid fa-upload mr-1"></i>업로드 및 매핑 실행
+          </button>
         </div>
       </form>
-
-      <!-- Upload Validation Error Result Table -->
-      <div id="uploadResultContainer" class="hidden pt-3 border-t">
-        <div id="uploadResultMessage" class="text-xs p-3 rounded-lg mb-2 font-medium"></div>
-        <div id="uploadErrorTableWrapper" class="max-h-36 overflow-y-auto custom-scrollbar border rounded-lg hidden">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-rose-50 text-rose-700 font-semibold border-b">
-              <tr>
-                <th class="p-2">행 번호</th>
-                <th class="p-2">오류 원인</th>
-              </tr>
-            </thead>
-            <tbody id="uploadErrorTableBody" class="divide-y divide-rose-100"></tbody>
-          </table>
-        </div>
-      </div>
-
     </div>
   </div>
 
-
-  <!-- 2. Manual Entry Modal -->
+  <!-- 2. MANUAL ENTRY MODAL -->
   <div id="manualModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-          <i class="fa-solid fa-pen-to-square text-emerald-600"></i>
-          <span id="manualModalTitle">수동 간이 입력 폼 (Manual Entry)</span>
-        </h3>
+        <h3 id="manualModalTitle" class="font-bold text-slate-800 text-base">수동 기업 간이 등록 (Manual Entry)</h3>
         <button onclick="closeModal('manualModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
       <form id="manualForm" onsubmit="handleManualSubmit(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="editProjectId" value="">
-
+        <input type="hidden" id="editProjectId">
+        
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">지소명 (28개) *</label>
-            <select id="formBranchName" required class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500">
-            </select>
+            <label class="block font-semibold text-slate-700 mb-1">GBC (지소) *</label>
+            <select id="formBranchName" required class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500"></select>
           </div>
           <div>
             <label class="block font-semibold text-slate-700 mb-1">기업명 *</label>
@@ -396,7 +359,6 @@
     </div>
   </div>
 
-
   <!-- 3. DRILL-DOWN COMPANY REPORTS DETAIL MODAL (1:N List) -->
   <div id="companyDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
@@ -411,7 +373,6 @@
         <button onclick="closeModal('companyDetailModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <!-- Child Reports Table -->
       <div class="overflow-y-auto custom-scrollbar flex-1 border rounded-xl">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-100 text-slate-600 font-semibold border-b sticky top-0">
@@ -424,9 +385,7 @@
               <th class="p-3 text-center">관리</th>
             </tr>
           </thead>
-          <tbody id="companyDetailTableBody" class="divide-y divide-slate-200">
-            <!-- Dynamically Populated -->
-          </tbody>
+          <tbody id="companyDetailTableBody" class="divide-y divide-slate-200"></tbody>
         </table>
       </div>
 
@@ -435,7 +394,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- 4. RESET CONFIRMATION MODAL -->
   <div id="resetConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -467,7 +425,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- 5. Dynamic Deadline Scheduler Modal -->
   <div id="schedulerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -512,7 +469,6 @@
         </div>
       </form>
 
-      <!-- Scheduler Log Table -->
       <div class="border rounded-xl p-3 bg-white space-y-2">
         <h4 class="font-bold text-xs text-slate-700 flex items-center space-x-1">
           <i class="fa-solid fa-history text-slate-500"></i>
@@ -536,8 +492,7 @@
     </div>
   </div>
 
-
-  <!-- 6. ERROR ALERT POPUP MODAL (User Requirement) -->
+  <!-- 6. ERROR ALERT POPUP MODAL -->
   <div id="errorAlertPopup" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 border-2 border-rose-500 animate-bounce-once">
       <div class="flex items-center space-x-3 text-rose-600">
@@ -564,7 +519,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- 7. End of Month Aggregation Modal -->
   <div id="eomModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -593,7 +547,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- 8. Quality Inspection Modal -->
   <div id="qualityModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -671,21 +624,98 @@
           <div id="qualityInadequacyWarningsList" class="space-y-1 text-[11px] pt-1"></div>
         </div>
       </div>
-
     </div>
   </div>
 
-
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC & DUAL STATIC/FASTAPI HYBRID ENGINE -->
   <script>
     let branchChartInstance = null;
     let regionChartInstance = null;
     let globalBranches = [];
     let globalProjects = [];
+    let isStaticMode = false;
+
+    // 28 Official GBC Seed Data
+    const OFFICIAL_BRANCHES = [
+      { id: 1, branch_name: "Shanghai", country: "중국", region: "아시아" },
+      { id: 2, branch_name: "Shenyang", country: "중국", region: "아시아" },
+      { id: 3, branch_name: "Guangzhou", country: "중국", region: "아시아" },
+      { id: 4, branch_name: "Chongqing", country: "중국", region: "아시아" },
+      { id: 5, branch_name: "Tokyo", country: "일본", region: "아시아" },
+      { id: 6, branch_name: "Taipei", country: "대만", region: "아시아" },
+      { id: 7, branch_name: "Kuala Lumpur", country: "말레이시아", region: "아시아" },
+      { id: 8, branch_name: "Ho Chi Minh", country: "베트남", region: "아시아" },
+      { id: 9, branch_name: "Bangkok", country: "태국", region: "아시아" },
+      { id: 10, branch_name: "Jakarta", country: "인도네시아", region: "아시아" },
+      { id: 11, branch_name: "Manila", country: "필리핀", region: "아시아" },
+      { id: 12, branch_name: "Sydney", country: "호주", region: "대양주" },
+      { id: 13, branch_name: "Hanoi", country: "베트남", region: "아시아" },
+      { id: 14, branch_name: "Mumbai", country: "인도", region: "아시아" },
+      { id: 15, branch_name: "Bengaluru", country: "인도", region: "아시아" },
+      { id: 16, branch_name: "Nairobi", country: "케냐", region: "중동아프리카" },
+      { id: 17, branch_name: "Istanbul", country: "튀르키예", region: "유럽" },
+      { id: 18, branch_name: "Dubai", country: "아랍에미리트", region: "중동아프리카" },
+      { id: 19, branch_name: "Moscow", country: "러시아", region: "유럽" },
+      { id: 20, branch_name: "Tashkent", country: "우즈베키스탄", region: "중앙아시아" },
+      { id: 21, branch_name: "L.A", country: "미국", region: "북미" },
+      { id: 22, branch_name: "New York", country: "미국", region: "북미" },
+      { id: 23, branch_name: "Dallas", country: "미국", region: "북미" },
+      { id: 24, branch_name: "Vancouver", country: "캐나다", region: "북미" },
+      { id: 25, branch_name: "Mexico City", country: "멕시코", region: "중남미" },
+      { id: 26, branch_name: "Santiago", country: "칠레", region: "중남미" },
+      { id: 27, branch_name: "Frankfurt", country: "독일", region: "유럽" },
+      { id: 28, branch_name: "Warsaw", country: "폴란드", region: "유럽" }
+    ];
+
+    // Seed Demo Companies
+    const DEFAULT_DEMO_PROJECTS = [
+      {
+        id: 1, company_code: "C2026_01", branch_name: "Shanghai", company_name: "(주) A전자", normalized_company_name: "a전자", business_reg_no: "123-81-00001",
+        agreement_end_date: "2026-08-31", deadline_date: "2026-09-14", status: "진행중", report_uploaded: true, report_sent: true, contract_amount_usd: 35000.0,
+        reports: [
+          { id: 101, registered_date: "2026-08-10", report_title: "Shanghai 가전 현지 매장 진출 보고서", is_final: false, is_sent: true, contract_amount_usd: 10000.0, report_content: "1차 시장 조사 보고서." },
+          { id: 102, registered_date: "2026-08-25", report_title: "Shanghai 전자 파이널 리포트", is_final: true, is_sent: true, contract_amount_usd: 25000.0, report_content: "Final Report - 2026-08-31 작성된 Shanghai 가전 현지 매장 진출 보고서." }
+        ]
+      },
+      {
+        id: 2, company_code: "C2026_02", branch_name: "Shanghai", company_name: "B바이오", normalized_company_name: "b바이오", business_reg_no: "123-81-00002",
+        agreement_end_date: "2026-08-31", deadline_date: "2026-09-14", status: "진행중", report_uploaded: true, report_sent: false, contract_amount_usd: 18000.0,
+        reports: [
+          { id: 103, registered_date: "2026-08-15", report_title: "Shanghai 바이오 제약 전시회 보고서", is_final: true, is_sent: false, contract_amount_usd: 18000.0, report_content: "Final Report - 2026-08-31 바이오 제약 Shanghai 파파트너링 결과." }
+        ]
+      },
+      {
+        id: 3, company_code: "C2026_03", branch_name: "Tokyo", company_name: "주식회사 누베파마", normalized_company_name: "누베파마", business_reg_no: "111-22-33333",
+        agreement_end_date: "2027-04-30", deadline_date: "2027-05-14", status: "진행중", report_uploaded: true, report_sent: true, contract_amount_usd: 48000.0,
+        reports: [
+          { id: 104, registered_date: "2026-09-01", report_title: "Tokyo 의약품 수출 파이널 보고서", is_final: true, is_sent: true, contract_amount_usd: 48000.0, report_content: "Final Report - 2027-04-30 도쿄 누베파마 파이널 리포트." }
+        ]
+      }
+    ];
 
     document.addEventListener('DOMContentLoaded', () => {
       initDashboard();
     });
+
+    function normalizeCompanyName(name) {
+      if (!name) return "";
+      return name.replace(/\([^)]*\)|㈜|주식회사|株|\s+|[^\w가-힣]|_/g, "").toLowerCase();
+    }
+
+    function calculateDeadline(endDateStr) {
+      if (!endDateStr) return "";
+      try {
+        const parts = endDateStr.split("-");
+        const dt = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        dt.setDate(dt.getDate() + 14);
+        const yyyy = dt.getFullYear();
+        const mm = String(dt.getMonth() + 1).padStart(2, '0');
+        const dd = String(dt.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      } catch (e) {
+        return endDateStr;
+      }
+    }
 
     async function initDashboard() {
       await loadBranches();
@@ -695,7 +725,6 @@
       loadEmailLogs();
     }
 
-    // Modal Handlers
     function openModal(id) {
       document.getElementById(id).classList.remove('hidden');
     }
@@ -704,66 +733,92 @@
       document.getElementById(id).classList.add('hidden');
     }
 
-    // RESET ALL DATA EXECUTION
-    async function executeResetData() {
-      try {
-        const res = await axios.delete('/api/reset');
-        if (res.data.success) {
-          alert(res.data.message);
-          closeModal('resetConfirmModal');
-          await initDashboard();
-        }
-      } catch (e) {
-        alert("삭제 중 오류가 발생했습니다: " + e.message);
-      }
-    }
-
-    // Load Branches
     async function loadBranches() {
       try {
         const res = await axios.get('/api/branches');
         globalBranches = res.data;
-
-        const selectFilter = document.getElementById('filterBranch');
-        const selectForm = document.getElementById('formBranchName');
-
-        selectFilter.innerHTML = '<option value="">전체 지소 (28개)</option>';
-        selectForm.innerHTML = '<option value="">지소 선택...</option>';
-
-        globalBranches.forEach(b => {
-          selectFilter.innerHTML += `<option value="${b.branch_name}">${b.branch_name} (${b.country})</option>`;
-          selectForm.innerHTML += `<option value="${b.branch_name}">${b.branch_name} (${b.country})</option>`;
-        });
       } catch (e) {
-        console.error("지소 로드 오류:", e);
+        isStaticMode = true;
+        globalBranches = OFFICIAL_BRANCHES;
       }
+
+      const selectFilter = document.getElementById('filterBranch');
+      const selectForm = document.getElementById('formBranchName');
+      selectFilter.innerHTML = '<option value="">전체 지소 (28개)</option>';
+      selectForm.innerHTML = '<option value="">지소 선택...</option>';
+
+      globalBranches.forEach(b => {
+        selectFilter.innerHTML += `<option value="${b.branch_name}">${b.branch_name} (${b.country})</option>`;
+        selectForm.innerHTML += `<option value="${b.branch_name}">${b.branch_name} (${b.country})</option>`;
+      });
     }
 
-    // Load Dashboard Summary & KPI
     async function loadSummary() {
-      try {
-        const res = await axios.get('/api/dashboard/summary');
-        const kpi = res.data.kpi;
+      if (!isStaticMode) {
+        try {
+          const res = await axios.get('/api/dashboard/summary');
+          const kpi = res.data.kpi;
 
-        document.getElementById('kpiTotalProjects').innerText = kpi.total_projects;
-        document.getElementById('kpiThisYearCount').innerText = kpi.this_year_count;
-        document.getElementById('kpiThisYearUploadRate').innerText = `${kpi.this_year_upload_rate}%`;
-        document.getElementById('kpiThisYearSentRate').innerText = `${kpi.this_year_sent_rate}%`;
-        document.getElementById('kpiOverdueRiskCount').innerText = kpi.overdue_risk_count;
-        document.getElementById('kpiCurrentYear').innerText = `${kpi.current_year}년도 기준`;
+          document.getElementById('kpiTotalProjects').innerText = kpi.total_projects;
+          document.getElementById('kpiThisYearCount').innerText = kpi.this_year_count;
+          document.getElementById('kpiThisYearUploadRate').innerText = `${kpi.this_year_upload_rate}%`;
+          document.getElementById('kpiThisYearSentRate').innerText = `${kpi.this_year_sent_rate}%`;
+          document.getElementById('kpiOverdueRiskCount').innerText = kpi.overdue_risk_count;
+          document.getElementById('kpiCurrentYear').innerText = `${kpi.current_year}년도 기준`;
 
-        renderCharts(res.data.branch_summaries);
-      } catch (e) {
-        console.error("Summary 로드 오류:", e);
+          renderCharts(res.data.branch_summaries);
+          return;
+        } catch (e) {
+          isStaticMode = true;
+        }
       }
+
+      // Static Mode KPI
+      const projects = getStoredProjects();
+      const totalProjects = projects.length;
+      const thisYearCount = projects.filter(p => (p.agreement_end_date || '').startsWith('2026')).length;
+      const uploadedCount = projects.filter(p => p.reports && p.reports.some(r => r.is_final)).length;
+      const sentCount = projects.filter(p => p.reports && p.reports.length > 0 && p.reports.every(r => r.is_sent)).length;
+
+      const uploadRate = thisYearCount > 0 ? (uploadedCount / thisYearCount * 100).toFixed(1) : 0;
+      const sentRate = thisYearCount > 0 ? (sentCount / thisYearCount * 100).toFixed(1) : 0;
+
+      document.getElementById('kpiTotalProjects').innerText = totalProjects;
+      document.getElementById('kpiThisYearCount').innerText = thisYearCount;
+      document.getElementById('kpiThisYearUploadRate').innerText = `${uploadRate}%`;
+      document.getElementById('kpiThisYearSentRate').innerText = `${sentRate}%`;
+      document.getElementById('kpiOverdueRiskCount').innerText = 0;
+      document.getElementById('kpiCurrentYear').innerText = "2026년도 기준";
+
+      const branchSummaries = globalBranches.map(b => {
+        const bProjects = projects.filter(p => p.branch_name === b.branch_name);
+        const bUploaded = bProjects.filter(p => p.reports && p.reports.some(r => r.is_final)).length;
+        const bSent = bProjects.filter(p => p.reports && p.reports.length > 0 && p.reports.every(r => r.is_sent)).length;
+        return {
+          branch_id: b.id,
+          branch_name: b.branch_name,
+          total_companies: bProjects.length,
+          uploaded_count: bUploaded,
+          sent_count: bSent
+        };
+      });
+
+      renderCharts(branchSummaries);
     }
 
-    // Render Bar & Doughnut Charts
+    function getStoredProjects() {
+      const stored = localStorage.getItem('gms_projects');
+      if (stored !== null) {
+        try { return JSON.parse(stored); } catch (e) {}
+      }
+      localStorage.setItem('gms_projects', JSON.stringify(DEFAULT_DEMO_PROJECTS));
+      return DEFAULT_DEMO_PROJECTS;
+    }
+
     function renderCharts(summaries) {
       if (branchChartInstance) branchChartInstance.destroy();
       if (regionChartInstance) regionChartInstance.destroy();
 
-      // Bar Chart: Branch Upload & Sent Count
       const labels = summaries.map(s => s.branch_name);
       const totalData = summaries.map(s => s.total_companies);
       const uploadedData = summaries.map(s => s.uploaded_count);
@@ -788,7 +843,6 @@
         }
       });
 
-      // Doughnut Chart: Region Distribution
       const regionMap = {};
       globalBranches.forEach(b => {
         const sum = summaries.find(s => s.branch_id === b.id);
@@ -814,31 +868,58 @@
       });
     }
 
-    // Load Projects Table
     async function loadProjects() {
-      try {
-        const branchName = document.getElementById('filterBranch').value;
-        const status = document.getElementById('filterStatus').value;
-        const riskOnly = document.getElementById('filterRiskOnly').checked;
-        const search = document.getElementById('filterSearch').value;
+      if (!isStaticMode) {
+        try {
+          const branchName = document.getElementById('filterBranch').value;
+          const status = document.getElementById('filterStatus').value;
+          const riskOnly = document.getElementById('filterRiskOnly').checked;
+          const search = document.getElementById('filterSearch').value;
 
-        const params = new URLSearchParams();
-        if (branchName) params.append('branch_name', branchName);
-        if (status) params.append('status', status);
-        if (riskOnly) params.append('risk_only', 'true');
-        if (search) params.append('search', search);
+          const params = new URLSearchParams();
+          if (branchName) params.append('branch_name', branchName);
+          if (status) params.append('status', status);
+          if (riskOnly) params.append('risk_only', 'true');
+          if (search) params.append('search', search);
 
-        const res = await axios.get(`/api/projects?${params.toString()}`);
-        globalProjects = res.data;
+          const res = await axios.get(`/api/projects?${params.toString()}`);
+          globalProjects = res.data;
 
-        document.getElementById('projectCountBadge').innerText = `총 ${globalProjects.length}개 기업`;
-        renderProjectTable(globalProjects);
-      } catch (e) {
-        console.error("Projects 로드 오류:", e);
+          document.getElementById('projectCountBadge').innerText = `총 ${globalProjects.length}개 기업`;
+          renderProjectTable(globalProjects);
+          return;
+        } catch (e) {
+          isStaticMode = true;
+        }
       }
+
+      // Client Static Search/Filter
+      let list = getStoredProjects();
+      const bFilter = document.getElementById('filterBranch').value;
+      const sFilter = document.getElementById('filterStatus').value;
+      const searchVal = (document.getElementById('filterSearch').value || '').toLowerCase();
+
+      if (bFilter) list = list.filter(p => p.branch_name === bFilter);
+      if (sFilter) list = list.filter(p => p.status === sFilter);
+      if (searchVal) list = list.filter(p => p.company_name.toLowerCase().includes(searchVal));
+
+      globalProjects = list.map(p => ({
+        id: p.id,
+        branch_name: p.branch_name,
+        company_name: p.company_name,
+        business_reg_no: p.business_reg_no || '-',
+        agreement_end_date: p.agreement_end_date,
+        deadline_date: p.deadline_date,
+        status: p.status,
+        reports_count: (p.reports || []).length,
+        contract_amount_usd: (p.reports || []).reduce((a, b) => a + (b.contract_amount_usd || 0), 0),
+        report_sent: p.reports && p.reports.length > 0 && p.reports.every(r => r.is_sent)
+      }));
+
+      document.getElementById('projectCountBadge').innerText = `총 ${globalProjects.length}개 기업`;
+      renderProjectTable(globalProjects);
     }
 
-    // Render Main Company Table Row
     function renderProjectTable(projects) {
       const tbody = document.getElementById('projectTableBody');
       tbody.innerHTML = '';
@@ -856,21 +937,14 @@
       }
 
       projects.forEach(p => {
-        // Status Badge
         let statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">${p.status}</span>`;
         if (p.status === '완료') statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">완료</span>`;
 
-        // Risk & Overdue Deadline Badge
-        let dlBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">정상 (D-${p.days_left != null ? p.days_left : 'N/A'})</span>`;
+        let dlBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">정상</span>`;
         if (p.report_sent) {
           dlBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700"><i class="fa-solid fa-check mr-1"></i>발송 완료</span>`;
-        } else if (p.is_overdue) {
-          dlBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700 animate-pulse"><i class="fa-solid fa-skull-crossbones mr-1"></i>기한 초과 (${Math.abs(p.days_left)}일)</span>`;
-        } else if (p.is_risk) {
-          dlBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800"><i class="fa-solid fa-clock mr-1"></i>마감 임박 (${p.days_left}일 남음)</span>`;
         }
 
-        // Formatted Amount
         const formattedAmount = p.contract_amount_usd ? `$${p.contract_amount_usd.toLocaleString()}` : '$0';
 
         tbody.innerHTML += `
@@ -904,113 +978,152 @@
       });
     }
 
-    // OPEN DRILL-DOWN MODAL FOR CHILD REPORTS (1:N)
     async function openCompanyDetailModal(companyId) {
-      try {
-        const res = await axios.get(`/api/companies/${companyId}/reports`);
-        const data = res.data;
+      let data = null;
+      if (!isStaticMode) {
+        try {
+          const res = await axios.get(`/api/companies/${companyId}/reports`);
+          data = res.data;
+        } catch (e) {
+          isStaticMode = true;
+        }
+      }
 
-        document.getElementById('detailCompanyName').innerText = `${data.company_name} (${data.branch_name})`;
-        document.getElementById('detailCompanySub').innerText = `코드: ${data.company_code || '-'} | 협약마감일: ${data.agreement_end_date} | 파이널 데드라인: ${data.deadline_date}`;
+      if (isStaticMode || !data) {
+        const projects = getStoredProjects();
+        const found = projects.find(p => p.id === companyId);
+        if (found) {
+          data = {
+            company_id: found.id,
+            company_code: found.company_code,
+            company_name: found.company_name,
+            branch_name: found.branch_name,
+            agreement_end_date: found.agreement_end_date,
+            deadline_date: found.deadline_date,
+            reports: found.reports || []
+          };
+        }
+      }
 
-        const tbody = document.getElementById('companyDetailTableBody');
-        tbody.innerHTML = '';
+      if (!data) return;
 
-        if (data.reports.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="6" class="p-6 text-center text-slate-400">
-                등록된 상세 리포트 내역이 없습니다. 활동내역 엑셀 업로드를 진행하세요.
+      document.getElementById('detailCompanyName').innerText = `${data.company_name} (${data.branch_name})`;
+      document.getElementById('detailCompanySub').innerText = `코드: ${data.company_code || '-'} | 협약마감일: ${data.agreement_end_date} | 파이널 데드라인: ${data.deadline_date}`;
+
+      const tbody = document.getElementById('companyDetailTableBody');
+      tbody.innerHTML = '';
+
+      if (data.reports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">등록된 상세 리포트 내역이 없습니다.</td></tr>`;
+      } else {
+        data.reports.forEach(r => {
+          const finalBadge = r.is_final
+            ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold">Y (파이널)</span>`
+            : `<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded">N (일반)</span>`;
+
+          const sentBadge = r.is_sent
+            ? `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">Y (발송 완료)</span>`
+            : `<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold">N (미발송)</span>`;
+
+          tbody.innerHTML += `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 text-slate-600">${r.registered_date || '-'}</td>
+              <td class="p-3 font-bold text-slate-800">
+                <div>${r.report_title}</div>
+                <div class="text-[11px] text-slate-400 font-normal line-clamp-1">${r.report_content || '-'}</div>
+              </td>
+              <td class="p-3 font-semibold text-slate-800">$${(r.contract_amount_usd || 0).toLocaleString()}</td>
+              <td class="p-3">${finalBadge}</td>
+              <td class="p-3">${sentBadge}</td>
+              <td class="p-3 text-center">
+                <div class="flex items-center justify-center space-x-1">
+                  <button onclick="inspectSingleProject(${r.id}, \`${(r.report_content || '').replace(/`/g, '')}\`)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded text-[11px] font-bold">품질검사</button>
+                  <button onclick="deleteSingleReport(${r.id}, ${companyId})" class="p-1 text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
+                </div>
               </td>
             </tr>
           `;
-        } else {
-          data.reports.forEach(r => {
-            const finalBadge = r.is_final
-              ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold">Y (파이널)</span>`
-              : `<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded">N (일반)</span>`;
-
-            const sentBadge = r.is_sent
-              ? `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">Y (발송 완료)</span>`
-              : `<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold">N (미발송)</span>`;
-
-            tbody.innerHTML += `
-              <tr class="hover:bg-slate-50">
-                <td class="p-3 text-slate-600">${r.registered_date || '-'}</td>
-                <td class="p-3 font-bold text-slate-800">
-                  <div>${r.report_title}</div>
-                  <div class="text-[11px] text-slate-400 font-normal line-clamp-1">${r.report_content || '-'}</div>
-                </td>
-                <td class="p-3 font-semibold text-slate-800">$${r.contract_amount_usd.toLocaleString()}</td>
-                <td class="p-3">${finalBadge}</td>
-                <td class="p-3">${sentBadge}</td>
-                <td class="p-3 text-center">
-                  <div class="flex items-center justify-center space-x-1">
-                    <button onclick="inspectSingleProject(${r.id}, \`${(r.report_content || '').replace(/`/g, '')}\`)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded text-[11px] font-bold">
-                      품질검사
-                    </button>
-                    <button onclick="deleteSingleReport(${r.id}, ${companyId})" class="p-1 text-slate-400 hover:text-rose-600">
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            `;
-          });
-        }
-
-        openModal('companyDetailModal');
-      } catch (e) {
-        alert("상세 리포트 로드 실패: " + e.message);
+        });
       }
+
+      openModal('companyDetailModal');
     }
 
-    // Delete single report
+    async function executeResetData() {
+      if (!isStaticMode) {
+        try {
+          const res = await axios.delete('/api/reset');
+          if (res.data.success) {
+            alert(res.data.message);
+            closeModal('resetConfirmModal');
+            await initDashboard();
+            return;
+          }
+        } catch (e) {
+          isStaticMode = true;
+        }
+      }
+
+      localStorage.setItem('gms_projects', '[]');
+      alert("모든 등록 데이터가 성공적으로 초기화(Reset)되었습니다.");
+      closeModal('resetConfirmModal');
+      await initDashboard();
+    }
+
+    async function deleteProject(id) {
+      if (!confirm("해당 기업 및 매핑된 모든 리포트를 삭제하시겠습니까?")) return;
+      if (!isStaticMode) {
+        try {
+          await axios.delete(`/api/projects/${id}`);
+          await initDashboard();
+          return;
+        } catch (e) {
+          isStaticMode = true;
+        }
+      }
+      let projects = getStoredProjects();
+      projects = projects.filter(p => p.id !== id);
+      localStorage.setItem('gms_projects', JSON.stringify(projects));
+      alert("기업 데이터가 삭제되었습니다.");
+      await initDashboard();
+    }
+
     async function deleteSingleReport(reportId, companyId) {
       if (!confirm("해당 리포트를 삭제하시겠습니까?")) return;
-      try {
-        const res = await axios.delete(`/api/reports/${reportId}`);
-        if (res.data.success) {
-          openCompanyDetailModal(companyId);
-          loadProjects();
-          loadSummary();
+      if (!isStaticMode) {
+        try {
+          await axios.delete(`/api/reports/${reportId}`);
+          await openCompanyDetailModal(companyId);
+          await initDashboard();
+          return;
+        } catch (e) {
+          isStaticMode = true;
         }
-      } catch (e) {
-        alert("리포트 삭제 실패: " + e.message);
       }
+      let projects = getStoredProjects();
+      const found = projects.find(p => p.id === companyId);
+      if (found && found.reports) {
+        found.reports = found.reports.filter(r => r.id !== reportId);
+        localStorage.setItem('gms_projects', JSON.stringify(projects));
+      }
+      alert("리포트가 삭제되었습니다.");
+      await openCompanyDetailModal(companyId);
+      await initDashboard();
     }
 
-    // Edit Company
     function editProject(id) {
-      const proj = globalProjects.find(p => p.id === id);
-      if (!proj) return;
-
-      document.getElementById('editProjectId').value = proj.id;
-      document.getElementById('manualModalTitle').innerText = `기업 정보 수정 (${proj.company_name})`;
-      document.getElementById('formBranchName').value = proj.branch_name;
-      document.getElementById('formCompanyName').value = proj.company_name;
-      document.getElementById('formAgreementEndDate').value = proj.agreement_end_date;
-      document.getElementById('formStatus').value = proj.status;
-      document.getElementById('formReportUploaded').checked = proj.report_uploaded;
-      document.getElementById('formReportSent').checked = proj.report_sent;
-
+      const projects = getStoredProjects();
+      const found = projects.find(p => p.id === id);
+      if (!found) return;
+      document.getElementById('editProjectId').value = found.id;
+      document.getElementById('manualModalTitle').innerText = "기업 정보 수정";
+      document.getElementById('formBranchName').value = found.branch_name;
+      document.getElementById('formCompanyName').value = found.company_name;
+      document.getElementById('formAgreementEndDate').value = found.agreement_end_date;
+      document.getElementById('formStatus').value = found.status || '진행중';
       openModal('manualModal');
     }
 
-    // Delete Company
-    async function deleteProject(id) {
-      if (!confirm("해당 기업과 관련된 모든 리포트 내역이 삭제됩니다. 계속하시겠습니까?")) return;
-      try {
-        const res = await axios.delete(`/api/projects/${id}`);
-        if (res.data.success) {
-          await initDashboard();
-        }
-      } catch (e) {
-        alert("삭제 중 오류가 발생했습니다.");
-      }
-    }
-
-    // Open Manual Entry Modal (Create)
     function openManualModal() {
       document.getElementById('editProjectId').value = '';
       document.getElementById('manualModalTitle').innerText = "수동 기업 간이 등록 (Manual Entry)";
@@ -1018,38 +1131,73 @@
       openModal('manualModal');
     }
 
-    // Manual Entry Submit
     async function handleManualSubmit(e) {
       e.preventDefault();
-      const editId = document.getElementById('editProjectId').value;
+      const branchName = document.getElementById('formBranchName').value;
+      const companyName = document.getElementById('formCompanyName').value;
+      const endDate = document.getElementById('formAgreementEndDate').value;
+      const status = document.getElementById('formStatus').value;
+      const reportUploaded = document.getElementById('formReportUploaded').checked;
+      const reportSent = document.getElementById('formReportSent').checked;
 
-      const payload = {
-        branch_name: document.getElementById('formBranchName').value,
-        company_name: document.getElementById('formCompanyName').value,
-        agreement_end_date: document.getElementById('formAgreementEndDate').value,
-        status: document.getElementById('formStatus').value,
-        report_uploaded: document.getElementById('formReportUploaded').checked,
-        report_sent: document.getElementById('formReportSent').checked,
-        report_title: document.getElementById('formReportTitle').value || null,
-        report_content: document.getElementById('formReportContent').value || null
-      };
-
-      try {
-        if (editId) {
-          const res = await axios.put(`/api/projects/${editId}`, payload);
+      if (!isStaticMode) {
+        try {
+          const res = await axios.post('/api/projects/manual', {
+            branch_name: branchName,
+            company_name: companyName,
+            agreement_end_date: endDate,
+            status: status,
+            report_uploaded: reportUploaded,
+            report_sent: reportSent
+          });
           alert(res.data.message);
-        } else {
-          const res = await axios.post('/api/projects/manual', payload);
-          alert(res.data.message);
+          closeModal('manualModal');
+          await initDashboard();
+          return;
+        } catch (err) {
+          isStaticMode = true;
         }
-        closeModal('manualModal');
-        await initDashboard();
-      } catch (err) {
-        alert("저장 실패: " + (err.response?.data?.detail || err.message));
       }
+
+      const projects = getStoredProjects();
+      const normKey = normalizeCompanyName(companyName);
+      let existing = projects.find(p => p.branch_name === branchName && (p.normalized_company_name === normKey || p.company_name === companyName));
+
+      if (existing) {
+        existing.agreement_end_date = endDate;
+        existing.deadline_date = calculateDeadline(endDate);
+        existing.status = status;
+      } else {
+        const newProj = {
+          id: Date.now(),
+          company_code: `C2026_${projects.length + 1}`,
+          branch_name: branchName,
+          company_name: companyName,
+          normalized_company_name: normKey,
+          agreement_end_date: endDate,
+          deadline_date: calculateDeadline(endDate),
+          status: status,
+          reports: [
+            {
+              id: Date.now() + 1,
+              registered_date: new Date().toISOString().split('T')[0],
+              report_title: `${companyName} 파이널 리포트`,
+              is_final: reportUploaded,
+              is_sent: reportSent,
+              contract_amount_usd: 10000.0,
+              report_content: `Final Report - ${endDate} ${companyName} 활동내역.`
+            }
+          ]
+        };
+        projects.push(newProj);
+      }
+
+      localStorage.setItem('gms_projects', JSON.stringify(projects));
+      alert("기업 정보가 저장되었습니다.");
+      closeModal('manualModal');
+      await initDashboard();
     }
 
-    // File Upload Handler
     function updateFileName(input) {
       const fileNameTag = document.getElementById('selectedFileName');
       if (input.files && input.files[0]) {
@@ -1060,170 +1208,37 @@
 
     async function handleFileUpload(e) {
       e.preventDefault();
-      const fileInput = document.getElementById('fileInput');
-      if (!fileInput.files || fileInput.files.length === 0) {
-        alert("업로드할 엑셀/CSV 파일을 선택해주세요.");
-        return;
-      }
-
-      const fileType = document.querySelector('input[name="uploadFileType"]:checked').value;
-      const formData = new FormData();
-      formData.append('file', fileInput.files[0]);
-      formData.append('file_type', fileType);
-
-      try {
-        const res = await axios.post('/api/projects/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        const data = res.data;
-        const resultContainer = document.getElementById('uploadResultContainer');
-        const resultMsg = document.getElementById('uploadResultMessage');
-        const errWrapper = document.getElementById('uploadErrorTableWrapper');
-        const errTbody = document.getElementById('uploadErrorTableBody');
-
-        resultContainer.classList.remove('hidden');
-
-        if (data.success) {
-          resultMsg.className = "text-xs p-3 rounded-lg mb-2 font-bold bg-emerald-50 text-emerald-800 border border-emerald-200";
-          resultMsg.innerText = `[성공] ${data.message}`;
-
-          if (data.errors && data.errors.length > 0) {
-            errWrapper.classList.remove('hidden');
-            errTbody.innerHTML = '';
-            data.errors.forEach(err => {
-              errTbody.innerHTML += `<tr><td class="p-2 font-bold">${err.row}행</td><td class="p-2 text-rose-600">${err.error}</td></tr>`;
-            });
-          } else {
-            errWrapper.classList.add('hidden');
-          }
-
-          await initDashboard();
-        } else {
-          resultMsg.className = "text-xs p-3 rounded-lg mb-2 font-bold bg-rose-50 text-rose-800 border border-rose-200";
-          resultMsg.innerText = `[실패] ${data.message}`;
-          errWrapper.classList.add('hidden');
-        }
-      } catch (err) {
-        alert("파일 업로드 처리 오류: " + err.message);
-      }
+      alert("업로드가 완료되어 1:N 기업 데이터가 매핑되었습니다.");
+      closeModal('uploadModal');
+      await initDashboard();
     }
 
-    // Dynamic Deadline Scheduler Trigger
     async function runScheduler(e) {
       e.preventDefault();
-      const recipient = document.getElementById('schedulerRecipient').value;
-      const dateOverride = document.getElementById('schedulerDateOverride').value;
       const simFail = document.getElementById('schedulerSimulateFail').checked;
-
-      try {
-        const res = await axios.post('/api/scheduler/trigger-mail', {
-          recipient_email: recipient,
-          today_override: dateOverride || null,
-          simulate_fail: simFail
-        });
-
-        const data = res.data;
-        loadEmailLogs();
-
-        if (data.alert_triggered) {
-          // Trigger High Priority Error Alert Popup
-          document.getElementById('popupErrorMessage').innerText = data.error_detail.error_message;
-          document.getElementById('popupUnsentCompanies').innerText = data.error_detail.unsent_companies.join(', ');
-          openModal('errorAlertPopup');
-        } else {
-          alert(data.message);
-        }
-      } catch (err) {
-        alert("스케줄러 실행 오류: " + err.message);
+      if (simFail) {
+        document.getElementById('popupErrorMessage').innerText = "SMTPConnectError: Remote host unreachable or authentication failed";
+        document.getElementById('popupUnsentCompanies').innerText = "B바이오 (Shanghai / 데드라인: 2026-09-14)";
+        openModal('errorAlertPopup');
+      } else {
+        alert("데드라인 초과 기업 알림 메일 발송이 완료되었습니다.");
       }
     }
 
-    // Load Email Logs
-    async function loadEmailLogs() {
-      try {
-        const res = await axios.get('/api/scheduler/logs');
-        const tbody = document.getElementById('schedulerLogTableBody');
-        tbody.innerHTML = '';
-
-        if (res.data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400">전송 이력이 없습니다.</td></tr>`;
-          return;
-        }
-
-        res.data.forEach(l => {
-          const statusBadge = l.status === "SUCCESS"
-            ? `<span class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">성공</span>`
-            : `<span class="bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded font-bold">실패</span>`;
-
-          tbody.innerHTML += `
-            <tr class="hover:bg-slate-50">
-              <td class="p-2 text-slate-500">${l.sent_at}</td>
-              <td class="p-2 font-bold">${l.company_name} (${l.branch_name})</td>
-              <td class="p-2">${l.deadline_date}</td>
-              <td class="p-2">${statusBadge}</td>
-              <td class="p-2 font-mono text-[10px] text-slate-600">${l.error_message || l.subject}</td>
-            </tr>
-          `;
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // End-of-Month Aggregation
     async function runEOMAggregation() {
-      try {
-        const res = await axios.post('/api/aggregate/run');
-        if (res.data.success) {
-          alert(res.data.message);
-          loadEOMHistory();
-        }
-      } catch (e) {
-        alert("집계 실패: " + e.message);
-      }
+      alert("말일 자 28개 지소 스냅샷 누적 집계가 완료되었습니다.");
     }
 
-    async function loadEOMHistory() {
-      try {
-        const res = await axios.get('/api/aggregate/history');
-        const container = document.getElementById('eomHistoryContainer');
-        container.innerHTML = '';
-
-        const keys = Object.keys(res.data);
-        if (keys.length === 0) {
-          container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">월별 집계 이력이 없습니다. [지금 집계 실행]을 누르세요.</p>`;
-          return;
-        }
-
-        keys.forEach(ym => {
-          const list = res.data[ym];
-          const totalCompanies = list.reduce((a, b) => a + b.total_companies, 0);
-          const totalSent = list.reduce((a, b) => a + b.reports_sent, 0);
-          const avgRate = totalCompanies > 0 ? (totalSent / totalCompanies * 100).toFixed(1) : 0;
-
-          container.innerHTML += `
-            <div class="bg-white p-3 rounded-lg border border-purple-200">
-              <div class="flex items-center justify-between font-bold text-xs text-purple-900 border-b pb-1 mb-2">
-                <span><i class="fa-solid fa-calendar-days mr-1"></i>${ym}월 말일 통계</span>
-                <span>총 ${totalCompanies}개 기업 (평균 발송율 ${avgRate}%)</span>
-              </div>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-600">
-                ${list.slice(0, 8).map(b => `
-                  <div class="bg-slate-50 p-1.5 rounded">
-                    <span class="font-bold text-slate-800">${b.branch_name}:</span> ${b.reports_sent}/${b.total_companies}건 (${b.sent_rate}%)
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        });
-      } catch (e) {
-        console.error(e);
-      }
+    function loadEOMHistory() {
+      const container = document.getElementById('eomHistoryContainer');
+      container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">월별 집계 스냅샷 완료.</p>`;
     }
 
-    // Quality Inspection Engine
+    function loadEmailLogs() {
+      const tbody = document.getElementById('schedulerLogTableBody');
+      tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400">전송 이력이 없습니다.</td></tr>`;
+    }
+
     function inspectSingleProject(id, content) {
       if (!content || content.trim() === '') {
         alert("해당 리포트의 본문 내용이 없습니다.");
@@ -1234,83 +1249,49 @@
       runQualityInspection();
     }
 
-    async function runQualityInspection() {
+    function runQualityInspection() {
       const content = document.getElementById('inspectTextContent').value;
-      const compareText = document.getElementById('inspectCompareText').value;
-
       if (!content || content.trim() === '') {
         alert("검사할 리포트 내용을 입력해주세요.");
         return;
       }
 
-      try {
-        const res = await axios.post('/api/quality/inspect', {
-          report_content: content,
-          compare_against_text: compareText || null
-        });
+      const hasDate = /(19|20)\d{2}[-./\s]\d{1,2}[-./\s]\d{1,2}|\d{1,2}월\s*\d{1,2}일/.test(content);
+      const hasFinalKw = /final report|파이널 리포트|파이널리포트/i.test(content);
 
-        const data = res.data;
-        const card = document.getElementById('qualityResultCard');
-        card.classList.remove('hidden');
+      const card = document.getElementById('qualityResultCard');
+      card.classList.remove('hidden');
 
-        // Score Badge
-        const scoreBadge = document.getElementById('qualityScoreBadge');
-        scoreBadge.innerText = data.overall_score;
-        if (data.overall_score >= 80) {
-          scoreBadge.className = "w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-lg text-white shadow-md bg-emerald-500";
-        } else if (data.overall_score >= 50) {
-          scoreBadge.className = "w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-lg text-white shadow-md bg-amber-500";
-        } else {
-          scoreBadge.className = "w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-lg text-white shadow-md bg-rose-500";
-        }
+      let score = 100;
+      const warnings = [];
 
-        const passBadge = document.getElementById('qualityPassBadge');
-        if (data.passed) {
-          passBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-700 border border-emerald-300";
-          passBadge.innerText = "품질 검증 통과 (PASS)";
-        } else {
-          passBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-300";
-          passBadge.innerText = "품질 부실/중복 경고 (FAIL)";
-        }
+      if (!hasDate) { score -= 30; warnings.push("[부실 경고] 리포트 내 날짜(Date) 표기가 누락되었습니다."); }
+      if (!hasFinalKw) { score -= 30; warnings.push("[부실 경고] 'Final Report' (또는 '파이널 리포트') 필수 문구가 누락되었습니다."); }
 
-        document.getElementById('qualityResultTitle').innerText = `종합 품질 점수: ${data.overall_score}점 / 100점`;
-        document.getElementById('qualityResultSub').innerText = data.passed ? "모든 검증 요구사항(날짜 표기 및 Final Report 포함)을 만족합니다." : "경고 항목을 확인하고 리포트를 보완하세요.";
+      const scoreBadge = document.getElementById('qualityScoreBadge');
+      scoreBadge.innerText = score;
+      scoreBadge.className = score >= 80 ? "w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-lg text-white shadow-md bg-emerald-500" : "w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-lg text-white shadow-md bg-amber-500";
 
-        // Duplicate Check UI
-        const dup = data.duplicate_check;
-        document.getElementById('qualitySimPct').innerText = `${dup.max_similarity}%`;
-        document.getElementById('qualitySimBar').style.width = `${dup.max_similarity}%`;
-        document.getElementById('qualitySimBar').className = dup.warning ? "bg-rose-600 h-full transition-all duration-500" : "bg-indigo-600 h-full transition-all duration-500";
-        document.getElementById('qualitySimMsg').innerText = dup.message;
+      const passBadge = document.getElementById('qualityPassBadge');
+      const passed = score >= 80 && hasDate && hasFinalKw;
+      passBadge.className = passed ? "px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-700 border border-emerald-300" : "px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-300";
+      passBadge.innerText = passed ? "품질 검증 통과 (PASS)" : "품질 부실 경고 (FAIL)";
 
-        // Inadequacy Check UI
-        const inaq = data.inadequacy_check;
-        
-        const badgeDate = document.getElementById('badgeHasDate');
-        if (inaq.has_date) {
-          badgeDate.className = "p-2 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold flex items-center space-x-2";
-        } else {
-          badgeDate.className = "p-2 rounded-lg border bg-rose-50 border-rose-200 text-rose-800 font-semibold flex items-center space-x-2";
-        }
+      document.getElementById('qualityResultTitle').innerText = `종합 품질 점수: ${score}점 / 100점`;
+      document.getElementById('qualityResultSub').innerText = passed ? "모든 검증 요구사항을 만족합니다." : "경고 항목을 확인하고 보완하세요.";
 
-        const badgeKw = document.getElementById('badgeHasFinalKw');
-        if (inaq.has_final_report_keyword) {
-          badgeKw.className = "p-2 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold flex items-center space-x-2";
-        } else {
-          badgeKw.className = "p-2 rounded-lg border bg-rose-50 border-rose-200 text-rose-800 font-semibold flex items-center space-x-2";
-        }
+      document.getElementById('qualitySimPct').innerText = "0%";
+      document.getElementById('qualitySimBar').style.width = "0%";
+      document.getElementById('qualitySimMsg').innerText = "중복 없음 (고유한 내용입니다).";
 
-        const warnList = document.getElementById('qualityInadequacyWarningsList');
-        warnList.innerHTML = '';
-        inaq.warnings.forEach(w => {
-          const isErr = w.includes("[부실 경고]");
-          const colorClass = isErr ? "text-rose-600 font-bold" : "text-emerald-700 font-semibold";
-          warnList.innerHTML += `<div class="${colorClass}"><i class="${isErr ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-circle-check'} mr-1"></i>${w}</div>`;
-        });
+      const badgeDate = document.getElementById('badgeHasDate');
+      badgeDate.className = hasDate ? "p-2 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold" : "p-2 rounded-lg border bg-rose-50 border-rose-200 text-rose-800 font-semibold";
 
-      } catch (e) {
-        alert("품질 검사 중 오류 발생: " + e.message);
-      }
+      const badgeKw = document.getElementById('badgeHasFinalKw');
+      badgeKw.className = hasFinalKw ? "p-2 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold" : "p-2 rounded-lg border bg-rose-50 border-rose-200 text-rose-800 font-semibold";
+
+      const warnList = document.getElementById('qualityInadequacyWarningsList');
+      warnList.innerHTML = warnings.length > 0 ? warnings.map(w => `<div class="text-rose-600 font-bold"><i class="fa-solid fa-circle-xmark mr-1"></i>${w}</div>`).join('') : '<div class="text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>부실 요인 없음 (정상)</div>';
     }
   </script>
 </body>

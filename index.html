@@ -10,6 +10,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- SheetJS Excel Parser CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -1208,9 +1210,175 @@
 
     async function handleFileUpload(e) {
       e.preventDefault();
-      alert("업로드가 완료되어 1:N 기업 데이터가 매핑되었습니다.");
-      closeModal('uploadModal');
-      await initDashboard();
+      const fileInput = document.getElementById('fileInput');
+      if (!fileInput.files || !fileInput.files[0]) {
+        alert("업로드할 엑셀/CSV 파일을 선택해주세요.");
+        return;
+      }
+      const file = fileInput.files[0];
+      const fileType = document.querySelector('input[name="uploadFileType"]:checked').value; // 'agreement' or 'activity'
+
+      // Live Server Mode
+      if (!isStaticMode) {
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const url = fileType === 'agreement' ? '/api/upload/agreement' : '/api/upload/activity';
+          const res = await axios.post(url, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+          alert(res.data.message || "엑셀 업로드가 완료되었습니다.");
+          closeModal('uploadModal');
+          await initDashboard();
+          return;
+        } catch (err) {
+          console.warn("API upload failed, switching to client-side XLSX parser:", err);
+          isStaticMode = true;
+        }
+      }
+
+      // Static Mode Client-side SheetJS Engine
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        let sheetName = workbook.SheetNames[0];
+        for (let s of workbook.SheetNames) {
+          if (!s.includes('총괄') && !s.includes('Summary')) {
+            sheetName = s;
+            break;
+          }
+        }
+        const worksheet = workbook.Sheets[sheetName];
+        const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+
+        if (rawData.length < 2) {
+          alert("엑셀 파일에 데이터 행이 없습니다.");
+          return;
+        }
+
+        let headerIdx = 0;
+        for (let i = 0; i < Math.min(rawData.length, 10); i++) {
+          const rowStr = rawData[i].map(c => String(c)).join(' ');
+          if (rowStr.includes('GBC') || rowStr.includes('기업명') || rowStr.includes('지소')) {
+            headerIdx = i;
+            break;
+          }
+        }
+
+        const headers = rawData[headerIdx].map(c => String(c).trim());
+        const dataRows = rawData.slice(headerIdx + 1);
+
+        let gbcCol = headers.findIndex(h => h.includes('GBC') || h.includes('지소'));
+        let nameCol = headers.findIndex(h => h.includes('기업명') || h.includes('회사명'));
+        let regNoCol = headers.findIndex(h => h.includes('사업자') || h.includes('등록번호'));
+        let periodCol = headers.findIndex(h => h.includes('기간') || h.includes('협약기간') || h.includes('마감일'));
+        let regDateCol = headers.findIndex(h => h.includes('등록일') || h.includes('날짜') || h.includes('일자'));
+        let amountCol = headers.findIndex(h => h.includes('실적') || h.includes('금액') || h.includes('성약'));
+        let contentCol = headers.findIndex(h => h.includes('활동내역') || h.includes('내용') || h.includes('리포트'));
+
+        if (gbcCol === -1) gbcCol = 0;
+        if (nameCol === -1) nameCol = 1;
+
+        let projects = getStoredProjects();
+        let updatedCount = 0;
+
+        dataRows.forEach((row, rowIdx) => {
+          const branchRaw = String(row[gbcCol] || '').trim();
+          const compName = String(row[nameCol] || '').trim();
+          if (!compName || !branchRaw) return;
+
+          const normName = normalizeCompanyName(compName);
+          const matchedBranch = globalBranches.find(b =>
+            b.branch_name.toLowerCase() === branchRaw.toLowerCase() ||
+            b.country.toLowerCase() === branchRaw.toLowerCase() ||
+            branchRaw.toLowerCase().includes(b.branch_name.toLowerCase())
+          ) || { branch_name: branchRaw };
+
+          const branchName = matchedBranch.branch_name;
+
+          if (fileType === 'agreement') {
+            const periodStr = periodCol !== -1 ? String(row[periodCol] || '') : '';
+            const endDtMatches = periodStr.match(/\d{4}[.\-/]\d{1,2}[.\-/]\d{1,2}/g);
+            let endDate = endDtMatches ? endDtMatches[endDtMatches.length - 1].replace(/[./]/g, '-') : new Date().toISOString().split('T')[0];
+            
+            const dtParts = endDate.split('-');
+            if (dtParts.length === 3) {
+              endDate = `${dtParts[0]}-${dtParts[1].padStart(2, '0')}-${dtParts[2].padStart(2, '0')}`;
+            }
+
+            const regNo = regNoCol !== -1 ? String(row[regNoCol] || '').trim() : '';
+
+            let existing = projects.find(p => p.branch_name === branchName && (p.normalized_company_name === normName || p.company_name === compName));
+
+            if (existing) {
+              if (endDate > existing.agreement_end_date) {
+                existing.agreement_end_date = endDate;
+                existing.deadline_date = calculateDeadline(endDate);
+              }
+              if (regNo) existing.business_reg_no = regNo;
+            } else {
+              projects.push({
+                id: Date.now() + rowIdx,
+                company_code: `C2026_${projects.length + 1}`,
+                branch_name: branchName,
+                company_name: compName,
+                normalized_company_name: normName,
+                business_reg_no: regNo || '-',
+                agreement_end_date: endDate,
+                deadline_date: calculateDeadline(endDate),
+                status: '진행중',
+                reports: []
+              });
+            }
+            updatedCount++;
+          } else {
+            const regDateStr = regDateCol !== -1 ? String(row[regDateCol] || '').trim() : new Date().toISOString().split('T')[0];
+            const contentStr = contentCol !== -1 ? String(row[contentCol] || '').trim() : `${compName} 활동 리포트`;
+            const amountNum = amountCol !== -1 ? parseFloat(String(row[amountCol]).replace(/[^0-9.]/g, '')) || 0 : 0;
+
+            const isFinal = /final report|파이널 리포트|파이널/i.test(contentStr);
+
+            let existing = projects.find(p => p.branch_name === branchName && (p.normalized_company_name === normName || p.company_name === compName));
+
+            if (!existing) {
+              const defaultEndDate = "2026-12-31";
+              existing = {
+                id: Date.now() + rowIdx,
+                company_code: `C2026_${projects.length + 1}`,
+                branch_name: branchName,
+                company_name: compName,
+                normalized_company_name: normName,
+                business_reg_no: '-',
+                agreement_end_date: defaultEndDate,
+                deadline_date: calculateDeadline(defaultEndDate),
+                status: '진행중',
+                reports: []
+              };
+              projects.push(existing);
+            }
+
+            existing.reports.push({
+              id: Date.now() + rowIdx + 1000,
+              registered_date: regDateStr,
+              report_title: `${compName} 리포트`,
+              is_final: isFinal,
+              is_sent: false,
+              contract_amount_usd: amountNum,
+              report_content: contentStr
+            });
+            updatedCount++;
+          }
+        });
+
+        localStorage.setItem('gms_projects', JSON.stringify(projects));
+        alert(`엑셀 데이터 파싱이 완료되었습니다! (총 ${updatedCount}건 처리 완료)`);
+        closeModal('uploadModal');
+        await initDashboard();
+
+      } catch (err) {
+        console.error("Client side Excel parse error:", err);
+        alert(`엑셀 파일 파싱 중 오류가 발생했습니다: ${err.message}`);
+      }
     }
 
     async function runScheduler(e) {
